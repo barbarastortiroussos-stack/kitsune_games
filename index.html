@@ -536,6 +536,49 @@
         window.addEventListener('DOMContentLoaded', () => {
             renderBooks();
         });
+
+        <form id="form-teste">
+  <input type="text" id="nome" placeholder="Seu nome" required />
+  <input type="text" id="texto" placeholder="Sua mensagem" required />
+  <button type="submit">Enviar pro banco</button>
+</form>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-app.js";
+  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBHs9ROpzSUrb2g14zzJQpa2cKT16Dk_C0",
+    authDomain: "teste-kitsune.firebaseapp.com",
+    projectId: "teste-kitsune",
+    storageBucket: "teste-kitsune.firebasestorage.app",
+    messagingSenderId: "258428278981",
+    appId: "1:258428278981:web:f3fd85c195de30b9c9f8ac",
+    measurementId: "G-BDKB82CK3F"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  document.getElementById("form-teste").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const nome = document.getElementById("nome").value.trim();
+    const texto = document.getElementById("texto").value.trim();
+
+    try {
+      await addDoc(collection(db, "mensagem"), {
+        nome: nome,
+        mensagem: texto,
+        data: new Date().toISOString()
+      });
+      alert("Salvo na coleção 'mensagem'!");
+      e.target.reset();
+    } catch (erro) {
+      console.error("Erro ao salvar:", erro);
+      alert("Deu erro: " + erro.message);
+    }
+  });
+</script>
     </script>
 </body>
 </html>
